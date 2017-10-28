@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest
 import android.bluetooth.BluetoothSocket
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -99,6 +100,10 @@ class connectBluethooth : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setScreenMain()
+    }
+
+    fun setScreenMain(){
         setContentView(R.layout.activity_connect_bluethooth)
         val textView = findViewById(R.id.texts) as TextView
         val connect = findViewById(R.id.button) as Button
@@ -127,24 +132,24 @@ class connectBluethooth : AppCompatActivity() {
         }
 
         start.setOnClickListener {
-            if(connectFlag){
-                startFlag = true
-                val buffer = ByteArray(1024)
-                var bytes: Int
-                var mmInStream: InputStream? = null
-                while(startFlag){
-                    mmInStream = mSocket!!.inputStream
-                    bytes = mmInStream!!.read(buffer)
-                // String型に変換
-                    val readMsg = String(buffer, 0, bytes)
-                    if(readMsg=="1"){
-                        count = count+1
-                    }
-//                    textView.setText(count)
-                }
-                textView.setText(count)
+            //            if(connectFlag){
+//                startFlag = true
+//                val buffer = ByteArray(1024)
+//                var bytes: Int
+//                var mmInStream: InputStream? = null
+//                while(startFlag){
+//                    mmInStream = mSocket!!.inputStream
+//                    bytes = mmInStream!!.read(buffer)
+//                // String型に変換
+//                    val readMsg = String(buffer, 0, bytes)
+//                    if(readMsg=="1"){
+//                        count = count+1
+//                    }
+////                    textView.setText(count)
+//                }
+            setScreenSub()
 //                mmOutputStream!!.write("1".toByteArray())
-            }
+//            }
         }
 
         fin.setOnClickListener {
@@ -155,6 +160,51 @@ class connectBluethooth : AppCompatActivity() {
             }
         }
 
+    }
+
+    var timerText2 : TextView? = null
+    fun setScreenSub(){
+        setContentView(R.layout.timer)
+        timerText2 = findViewById(R.id.timer) as TextView
+
+
+        timerText2!!.text = "0:00.000"
+
+        val countDown = CountDown(180000, 100)
+        countDown.start()
+
+    }
+    internal inner class CountDown(millisInFuture: Long, countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
+        override fun onFinish() {
+            // 完了
+            timerText2!!.text = "0:00.000"
+        }
+
+        // インターバルで呼ばれる
+        val buffer = ByteArray(1024)
+        var bytes: Int
+        var mmInStream: InputStream? = null
+        override fun onTick(millisUntilFinished: Long) {
+            // 残り時間を分、秒、ミリ秒に分割
+            val mm = millisUntilFinished / 1000 / 60
+            val ss = millisUntilFinished / 1000 % 60
+            val ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60
+
+            timerText2!!.text = String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms)
+
+//                mmInStream = mSocket!!.inputStream
+//                bytes = mmInStream!!.read(buffer)
+//                // String型に変換
+//                val readMsg = String(buffer, 0, bytes)
+//                if(readMsg=="1"){
+
+//                    count = count+1
+//                }
+        }
+    }
+
+    fun setschereenTimeup(){
+        
     }
 
 
