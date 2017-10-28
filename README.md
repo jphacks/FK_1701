@@ -1,4 +1,4 @@
-# サンプル（プロダクト名）
+# 強制学習装置
 
 [![Product Name](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/channel/UC4PtjOfZTbVp9DwtJv82Lzg)
 
