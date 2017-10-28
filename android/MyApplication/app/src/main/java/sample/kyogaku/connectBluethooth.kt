@@ -32,13 +32,11 @@ import java.util.logging.Logger
 class connectBluethooth : AppCompatActivity() {
 
     internal var REQUEST_ENABLE_BT = 1
-    var data = mutableListOf("aaa","aaaaaa")
     val Log = Logger.getLogger(connectBluethooth::class.java.name)
     var connectFlag = false
     var mmOutputStream: OutputStream? = null
     var mSocket: BluetoothSocket? = null
     var startFlag = false
-    var count = 0
 
     private var mInputTextView: TextView? = null
 
@@ -170,19 +168,22 @@ class connectBluethooth : AppCompatActivity() {
 
         timerText2!!.text = "0:00.000"
 
-        val countDown = CountDown(180000, 100)
+        val countDown = CountDown(1800, 100)
         countDown.start()
 
     }
+
     internal inner class CountDown(millisInFuture: Long, countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
+        var countZero = 0
         override fun onFinish() {
             // 完了
             timerText2!!.text = "0:00.000"
+            setschereenTimeup(countZero)
         }
 
         // インターバルで呼ばれる
         val buffer = ByteArray(1024)
-        var bytes: Int
+        var bytes: Int? = null
         var mmInStream: InputStream? = null
         override fun onTick(millisUntilFinished: Long) {
             // 残り時間を分、秒、ミリ秒に分割
@@ -198,13 +199,26 @@ class connectBluethooth : AppCompatActivity() {
 //                val readMsg = String(buffer, 0, bytes)
 //                if(readMsg=="1"){
 
-//                    count = count+1
+//                    countZ = count+1
 //                }
         }
     }
 
-    fun setschereenTimeup(){
-        
+    fun setschereenTimeup(count:Int){
+        setContentView(R.layout.timeup)
+        val timeupComment = findViewById(R.id.timeupComment) as TextView
+        val fin = findViewById(R.id.fin) as TextView
+        val timerSet = findViewById(R.id.button) as Button
+
+        timeupComment!!.text=String.format( "あなたは%d回ビリビリにありました。",count)
+
+        if(count == 0)fin.setText("よくできました")
+        else if(3 <= count)fin.setText("もう少しですね。次はもっと勉強頑張りましょう")
+        else fin.setText("勉強しろ〜〜〜")
+
+        timerSet.setOnClickListener {
+            setScreenMain()
+        }
     }
 
 
