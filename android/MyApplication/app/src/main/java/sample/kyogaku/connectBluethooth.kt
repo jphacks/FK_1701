@@ -14,11 +14,14 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest
+import android.bluetooth.BluetoothSocket
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.*
 
 
@@ -30,8 +33,13 @@ class connectBluethooth : AppCompatActivity() {
     internal var REQUEST_ENABLE_BT = 1
     var data = mutableListOf("aaa","aaaaaa")
     val Log = Logger.getLogger(connectBluethooth::class.java.name)
-    var a= "kawa"
+    var connectFlag = false
+    var mmOutputStream: OutputStream? = null
+    var mSocket: BluetoothSocket? = null
+    var startFlag = false
+    var count = 0
 
+    private var mInputTextView: TextView? = null
 
     private fun bluetoothEnabled() {
         val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -87,40 +95,76 @@ class connectBluethooth : AppCompatActivity() {
         startActivity(discoverableIntent)
     }
 
-    private fun connect() {
-
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connect_bluethooth)
-        val listView = findViewById(R.id.texts) as TextView
+        val textView = findViewById(R.id.texts) as TextView
+        val connect = findViewById(R.id.button) as Button
+        val start = findViewById(R.id.button2) as Button
+        val fin = findViewById(R.id.button3) as Button
+
 
         bluetoothEnabled()
         checkPermission()
 
-        var btAdapter = BluetoothAdapter.getDefaultAdapter();
-        var btDevices = btAdapter.getBondedDevices();
-        var devList = ""
+        connect.setOnClickListener {
+            connectFlag = true
+            var btAdapter = BluetoothAdapter.getDefaultAdapter();
+            var btDevices = btAdapter.getBondedDevices();
+            var devList = ""
             for (device in btDevices) {
-                if(device.getName() == SERVICE_UUID){
-                    var mmsocket = device.createRfcommSocketToServiceRecord(MY_UUID)
-                    mmsocket.connect()
+                if (device.getName() == SERVICE_UUID) {
+                    var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+                    mmSocket.connect()
+                    mSocket = mmSocket
+                    var mOutputStream = mmSocket.getOutputStream()
+                    mmOutputStream = mOutputStream
                 }
             }
-            listView.setText(devList)
+            textView.setText(devList)
         }
+
+        start.setOnClickListener {
+            if(connectFlag){
+                startFlag = true
+                val buffer = ByteArray(1024)
+                var bytes: Int
+                var mmInStream: InputStream? = null
+                while(startFlag){
+                    mmInStream = mSocket!!.inputStream
+                    bytes = mmInStream!!.read(buffer)
+                // String型に変換
+                    val readMsg = String(buffer, 0, bytes)
+                    if(readMsg=="1"){
+                        count = count+1
+                    }
+//                    textView.setText(count)
+                }
+                textView.setText(count)
+//                mmOutputStream!!.write("1".toByteArray())
+            }
+        }
+
+        fin.setOnClickListener {
+            if(connectFlag){
+                startFlag = false
+//                mmOutputStream!!.write("0".toByteArray())
+
+            }
+        }
+
+    }
+
 
 
     companion object {
         private val SERVICE_UUID = "RNBT-D6E4"
         private val MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     }
-//
-//    override fun onClick(v: View?){
-//        super.
-//    }
+
 
 }
+
 
