@@ -1,6 +1,6 @@
 # 強制学習装置
 
-[![強制学習装置](video_img.png)](https://www.youtube.com/watch?=av49qZ9IXIc)]
+[![強制学習装置](video_img.png)](https://www.youtube.com/watch?=av49qZ9IXIc)
 
 ## 製品概要
 ### 学習 × Tech
