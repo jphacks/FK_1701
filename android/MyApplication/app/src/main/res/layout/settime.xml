@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_margin="10dp"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="勉強時間の記入"/>
+
+    <TextView
+        android:id="@+id/times"
+        android:layout_margin="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        />
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:layout_marginLeft="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/minA"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="分"/>
+
+        <Button
+            android:id="@+id/secA"
+            android:layout_marginLeft="20dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="秒"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/biribiri"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:text="ビリビリまでの時間の入力"/>
+
+    <RadioGroup android:id="@+id/radiogroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton android:id="@+id/radiobutton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5秒" />
+
+        <RadioButton android:id="@+id/radiobutton10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10秒" />
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:layout_margin="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <Button
+            android:id="@+id/start"
+            android:layout_marginLeft="100dp"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:text="start"
+            />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
