@@ -40,12 +40,27 @@
 
     </LinearLayout>
 
-    <Button
+    <TextView
         android:id="@+id/biribiri"
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:textSize="25sp"
+        android:layout_height="50dp"
+        android:textSize="20sp"
         android:text="ビリビリまでの時間の入力"/>
+
+    <RadioGroup android:id="@+id/radiogroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton android:id="@+id/radiobutton5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5秒" />
+
+        <RadioButton android:id="@+id/radiobutton10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10秒" />
+    </RadioGroup>
 
 
     <LinearLayout
@@ -59,7 +74,7 @@
             android:id="@+id/start"
             android:layout_marginLeft="100dp"
             android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:scaleType="fitCenter"
             android:text="start"
             />

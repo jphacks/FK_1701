@@ -166,7 +166,7 @@ class connectBluethooth : AppCompatActivity() {
         setTimeSet()
     }
 
-    var studyTime:Long = 60000
+    var studyTime:Long = 30000
 
 
     fun setTimeSet(){
@@ -175,17 +175,24 @@ class connectBluethooth : AppCompatActivity() {
 
 
 //        var hour:Int = 1
-        var mine = 1
-        var seco = 0
+        var mine = 0
+        var seco = 30
+        var radio:RadioButton
         var timerText = findViewById(R.id.times) as TextView
 //        val hourA = findViewById(R.id.hour) as Button
         val minA = findViewById(R.id.minA) as Button
         val secA = findViewById(R.id.secA) as Button
         val start = findViewById(R.id.start) as Button
 
+        val radioGroup = findViewById(R.id.radiogroup) as RadioGroup
+        // 指定した ID のラジオボタンをチェック
+        radioGroup.check(R.id.radiobutton5)
+        // チェックされているラジオボタンの ID を取得
 
 
-        timerText!!.text = "01:00"
+
+
+        timerText!!.text = "00:30"
 
 //        hourA.setOnClickListener {
 //            hour = hour +1
@@ -198,7 +205,7 @@ class connectBluethooth : AppCompatActivity() {
             studyTime += 60000
             if(mine == 60 ){
                 mine = 0
-                studyTime -= 3540000
+                studyTime -= 3600000
             }
             showTime(timerText,mine,seco)
         }
@@ -208,7 +215,7 @@ class connectBluethooth : AppCompatActivity() {
             studyTime += 1000
             if(seco == 60){
                 seco = 0
-                studyTime -= 59000
+                studyTime -= 60000
             }
             showTime(timerText,mine,seco)
 //            timerText!!.text = String.format("%2$02d:%2$02d", mine, seco)
@@ -216,7 +223,10 @@ class connectBluethooth : AppCompatActivity() {
 
 
         start.setOnClickListener {
-            mmOutputStream!!.write("1".toByteArray())
+            val id = radioGroup.getCheckedRadioButtonId()-2131427450
+            if(id == 0)mmOutputStream!!.write("1".toByteArray())
+            else mmOutputStream!!.write("2".toByteArray())
+//            mmOutputStream!!.write("1".toByteArray())
             mmOutputStream!!.write("5".toByteArray())
             setScreenSub()
         }
@@ -261,7 +271,7 @@ class connectBluethooth : AppCompatActivity() {
         timerText2!!.text = "00:00"
 
         val countDown = CountDown(studyTime, 100)
-        studyTime = 60000
+        studyTime = 30000
         countDown.start()
 
     }
@@ -290,7 +300,6 @@ class connectBluethooth : AppCompatActivity() {
 //            val hm = millisUntilFinished / 1000
             val mm = (millisUntilFinished /1000 / 60)
             val ss = (millisUntilFinished / 1000 % 60)
-            Log.warning(""+millisUntilFinished)
             showTime(timerText2!!,mm,ss)
 //            timerText2!!.text = String.format("%2$02d:%2$02d", mm, ss)
 
@@ -314,10 +323,10 @@ class connectBluethooth : AppCompatActivity() {
         val fin = findViewById(R.id.fin) as TextView
         val timerSet = findViewById(R.id.button) as Button
 
-        timeupComment!!.text=String.format( "あなたは%d回ビリビリにありました。",count)
+        timeupComment!!.text="あなたは"+(count/65)+"回ビリビリにあいました。"
 
         if(count == 0)fin.setText("よくできました")
-        else if(3 <= count)fin.setText("もう少しですね。次はもっと勉強頑張りましょう")
+        else if(3 >= count/65)fin.setText("もう少しですね。次はもっと勉強頑張りましょう")
         else fin.setText("勉強しろ〜〜〜")
 
         timerSet.setOnClickListener {
