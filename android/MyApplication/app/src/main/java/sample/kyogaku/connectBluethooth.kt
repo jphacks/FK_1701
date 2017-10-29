@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.Manifest
 import android.bluetooth.BluetoothSocket
 import android.os.CountDownTimer
+import android.os.Vibrator
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -103,62 +104,153 @@ class connectBluethooth : AppCompatActivity() {
 
     fun setScreenMain(){
         setContentView(R.layout.activity_connect_bluethooth)
-        val textView = findViewById(R.id.texts) as TextView
-        val connect = findViewById(R.id.button) as Button
-        val start = findViewById(R.id.button2) as Button
-        val fin = findViewById(R.id.button3) as Button
-
 
         bluetoothEnabled()
         checkPermission()
-
-        connect.setOnClickListener {
-            connectFlag = true
-            var btAdapter = BluetoothAdapter.getDefaultAdapter();
-            var btDevices = btAdapter.getBondedDevices();
-            var devList = ""
-            for (device in btDevices) {
-                if (device.getName() == SERVICE_UUID) {
-                    var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
-                    mmSocket.connect()
-                    mSocket = mmSocket
-                    var mOutputStream = mmSocket.getOutputStream()
-                    mmOutputStream = mOutputStream
-                }
+        var btAdapter = BluetoothAdapter.getDefaultAdapter();
+        var btDevices = btAdapter.getBondedDevices();
+        for (device in btDevices) {
+            if (device.getName() == SERVICE_UUID) {
+                var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+                mmSocket.connect()
+                mSocket = mmSocket
+                var mOutputStream = mmSocket.getOutputStream()
+                mmOutputStream = mOutputStream
             }
-            textView.setText(devList)
         }
+
+//        connect.setOnClickListener {
+//            connectFlag = true
+//            var btAdapter = BluetoothAdapter.getDefaultAdapter();
+//            var btDevices = btAdapter.getBondedDevices();
+//            for (device in btDevices) {
+//                if (device.getName() == SERVICE_UUID) {
+//                    var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+//                    mmSocket.connect()
+//                    mSocket = mmSocket
+//                    var mOutputStream = mmSocket.getOutputStream()
+//                    mmOutputStream = mOutputStream
+//                }
+//            }
+//            textView.setText(devList)
+//        }
+//
+//        start.setOnClickListener {
+//            //            if(connectFlag){
+////                startFlag = true
+////                val buffer = ByteArray(1024)
+////                var bytes: Int
+////                var mmInStream: InputStream? = null
+////                while(startFlag){
+////                    mmInStream = mSocket!!.inputStream
+////                    bytes = mmInStream!!.read(buffer)
+////                // String型に変換
+////                    val readMsg = String(buffer, 0, bytes)
+////                    if(readMsg=="1"){
+////                        count = count+1
+////                    }
+//////                    textView.setText(count)
+////                }
+//            setScreenSub()
+////                mmOutputStream!!.write("1".toByteArray())
+////            }
+//        }
+
+//        fin.setOnClickListener {
+//            if(connectFlag){
+//                startFlag = false
+////                mmOutputStream!!.write("0".toByteArray())
+//
+//            }
+//        }
+        setTimeSet()
+    }
+
+    var studyTime:Long = 60000
+
+
+    fun setTimeSet(){
+        setContentView(R.layout.settime)
+
+
+
+//        var hour:Int = 1
+        var mine = 1
+        var seco = 0
+        var timerText = findViewById(R.id.times) as TextView
+//        val hourA = findViewById(R.id.hour) as Button
+        val minA = findViewById(R.id.minA) as Button
+        val secA = findViewById(R.id.secA) as Button
+        val start = findViewById(R.id.start) as Button
+
+
+
+        timerText!!.text = "01:00"
+
+//        hourA.setOnClickListener {
+//            hour = hour +1
+//            if(hour == 24 )hour = 0
+//            timerText!!.text = String.format("%2$02d:%2$02d:%2$02d", hour, min, sec)
+//        }
+
+        minA.setOnClickListener {
+            mine = mine + 1
+            studyTime += 60000
+            if(mine == 60 ){
+                mine = 0
+                studyTime -= 3540000
+            }
+            showTime(timerText,mine,seco)
+        }
+
+        secA.setOnClickListener {
+            seco = seco +1
+            studyTime += 1000
+            if(seco == 60){
+                seco = 0
+                studyTime -= 59000
+            }
+            showTime(timerText,mine,seco)
+//            timerText!!.text = String.format("%2$02d:%2$02d", mine, seco)
+        }
+
 
         start.setOnClickListener {
-            //            if(connectFlag){
-//                startFlag = true
-//                val buffer = ByteArray(1024)
-//                var bytes: Int
-//                var mmInStream: InputStream? = null
-//                while(startFlag){
-//                    mmInStream = mSocket!!.inputStream
-//                    bytes = mmInStream!!.read(buffer)
-//                // String型に変換
-//                    val readMsg = String(buffer, 0, bytes)
-//                    if(readMsg=="1"){
-//                        count = count+1
-//                    }
-////                    textView.setText(count)
-//                }
+            mmOutputStream!!.write("1".toByteArray())
+            mmOutputStream!!.write("5".toByteArray())
             setScreenSub()
-//                mmOutputStream!!.write("1".toByteArray())
-//            }
         }
 
-        fin.setOnClickListener {
-            if(connectFlag){
-                startFlag = false
-//                mmOutputStream!!.write("0".toByteArray())
 
-            }
-        }
 
     }
+
+    fun showTime(ttext:TextView,mm:Int,ss:Int){
+        var mv = ""
+        var sv = ""
+        if(mm>9) mv =""+ mm
+        else mv = "0" + mm
+
+        if(ss>9) sv = "" + ss
+        else sv = "0" + ss
+        ttext!!.text = mv + ":" + sv
+
+    }
+
+    fun showTime(ttext:TextView,mm:Long,ss:Long){
+        var mv = ""
+        var sv = ""
+        if(mm>9) mv =""+ mm
+        else mv = "0" + mm
+
+        if(ss>9) sv = "" + ss
+        else sv = "0" + ss
+        ttext!!.text = mv + ":" + sv
+
+    }
+
+
+
 
     var timerText2 : TextView? = null
     fun setScreenSub(){
@@ -166,46 +258,58 @@ class connectBluethooth : AppCompatActivity() {
         timerText2 = findViewById(R.id.timer) as TextView
 
 
-        timerText2!!.text = "0:00.000"
+        timerText2!!.text = "00:00"
 
-        val countDown = CountDown(1800, 100)
+        val countDown = CountDown(studyTime, 100)
+        studyTime = 60000
         countDown.start()
 
     }
 
+
     internal inner class CountDown(millisInFuture: Long, countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
         var countZero = 0
+        var biriFlag = false
+
+
         override fun onFinish() {
-            // 完了
-            timerText2!!.text = "0:00.000"
+            // 完
+            timerText2!!.text = "00:00"
             setschereenTimeup(countZero)
         }
 
         // インターバルで呼ばれる
         val buffer = ByteArray(1024)
-        var bytes: Int? = null
+        var bytes: Int =0
         var mmInStream: InputStream? = null
+
+
         override fun onTick(millisUntilFinished: Long) {
-            // 残り時間を分、秒、ミリ秒に分割
-            val mm = millisUntilFinished / 1000 / 60
-            val ss = millisUntilFinished / 1000 % 60
-            val ms = millisUntilFinished - ss * 1000 - mm * 1000 * 60
 
-            timerText2!!.text = String.format("%1$02d:%2$02d.%3$03d", mm, ss, ms)
+            // 残り時間を分、秒に分割
+//            val hm = millisUntilFinished / 1000
+            val mm = (millisUntilFinished /1000 / 60)
+            val ss = (millisUntilFinished / 1000 % 60)
+            Log.warning(""+millisUntilFinished)
+            showTime(timerText2!!,mm,ss)
+//            timerText2!!.text = String.format("%2$02d:%2$02d", mm, ss)
 
-//                mmInStream = mSocket!!.inputStream
-//                bytes = mmInStream!!.read(buffer)
-//                // String型に変換
-//                val readMsg = String(buffer, 0, bytes)
-//                if(readMsg=="1"){
-
-//                    countZ = count+1
-//                }
+            mmInStream = mSocket!!.inputStream
+            bytes = mmInStream!!.read(buffer)
+                // String型に変換
+            val readMsg = String(buffer, 0, bytes)
+            if(readMsg=="1" && biriFlag == false){
+                countZero = countZero +1
+                biriFlag = true
+            }
+            else biriFlag=false
         }
     }
 
     fun setschereenTimeup(count:Int){
         setContentView(R.layout.timeup)
+        mmOutputStream!!.write("6".toByteArray())
+
         val timeupComment = findViewById(R.id.timeupComment) as TextView
         val fin = findViewById(R.id.fin) as TextView
         val timerSet = findViewById(R.id.button) as Button
@@ -217,7 +321,7 @@ class connectBluethooth : AppCompatActivity() {
         else fin.setText("勉強しろ〜〜〜")
 
         timerSet.setOnClickListener {
-            setScreenMain()
+            setTimeSet()
         }
     }
 
