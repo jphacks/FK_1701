@@ -107,63 +107,38 @@ class connectBluethooth : AppCompatActivity() {
 
         bluetoothEnabled()
         checkPermission()
-        var btAdapter = BluetoothAdapter.getDefaultAdapter();
-        var btDevices = btAdapter.getBondedDevices();
-        for (device in btDevices) {
-            if (device.getName() == SERVICE_UUID) {
-                var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
-                mmSocket.connect()
-                mSocket = mmSocket
-                var mOutputStream = mmSocket.getOutputStream()
-                mmOutputStream = mOutputStream
+
+        val img_b = findViewById(R.id.image_button) as ImageButton
+//        var btAdapter = BluetoothAdapter.getDefaultAdapter();
+//        var btDevices = btAdapter.getBondedDevices();
+//        for (device in btDevices) {
+//            if (device.getName() == SERVICE_UUID) {
+//                var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+//                mmSocket.connect()
+//                mSocket = mmSocket
+//                var mOutputStream = mmSocket.getOutputStream()
+//                mmOutputStream = mOutputStream
+//            }
+//        }
+
+        img_b.setOnClickListener {
+            connectFlag = true
+            var btAdapter = BluetoothAdapter.getDefaultAdapter();
+            var btDevices = btAdapter.getBondedDevices();
+            for (device in btDevices) {
+                if (device.getName() == SERVICE_UUID) {
+                    var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
+                    mmSocket.connect()
+                    mSocket = mmSocket
+                    var mOutputStream = mmSocket.getOutputStream()
+                    mmOutputStream = mOutputStream
+                }
             }
+            setTimeSet()
         }
 
-//        connect.setOnClickListener {
-//            connectFlag = true
-//            var btAdapter = BluetoothAdapter.getDefaultAdapter();
-//            var btDevices = btAdapter.getBondedDevices();
-//            for (device in btDevices) {
-//                if (device.getName() == SERVICE_UUID) {
-//                    var mmSocket = device.createRfcommSocketToServiceRecord(MY_UUID)
-//                    mmSocket.connect()
-//                    mSocket = mmSocket
-//                    var mOutputStream = mmSocket.getOutputStream()
-//                    mmOutputStream = mOutputStream
-//                }
-//            }
-//            textView.setText(devList)
-//        }
-//
-//        start.setOnClickListener {
-//            //            if(connectFlag){
-////                startFlag = true
-////                val buffer = ByteArray(1024)
-////                var bytes: Int
-////                var mmInStream: InputStream? = null
-////                while(startFlag){
-////                    mmInStream = mSocket!!.inputStream
-////                    bytes = mmInStream!!.read(buffer)
-////                // String型に変換
-////                    val readMsg = String(buffer, 0, bytes)
-////                    if(readMsg=="1"){
-////                        count = count+1
-////                    }
-//////                    textView.setText(count)
-////                }
-//            setScreenSub()
-////                mmOutputStream!!.write("1".toByteArray())
-////            }
-//        }
 
-//        fin.setOnClickListener {
-//            if(connectFlag){
-//                startFlag = false
-////                mmOutputStream!!.write("0".toByteArray())
-//
-//            }
-//        }
-        setTimeSet()
+
     }
 
     var studyTime:Long = 30000

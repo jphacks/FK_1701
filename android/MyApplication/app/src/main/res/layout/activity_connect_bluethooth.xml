@@ -16,7 +16,8 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="0dp">
         
-        <ImageView
+        <ImageButton
+            android:id="@+id/image_button"
             android:src="@drawable/aikon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
